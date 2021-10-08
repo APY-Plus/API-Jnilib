@@ -1,35 +1,33 @@
-public class Test extends Thread {
+public class Test {
     static {
         System.loadLibrary("jnilib");
     }
 
-    public native void init();
+    public static native void init();
 
-    public native void hello1();
+    public static native void mode1(String fname);
 
-    public native void hello2();
+    public static native void mode2();
 
-    public Test() {
-        init();
+    public static void mode1_test() {
+        Thread thread = new Thread(() -> {
+            mode1("test.py");
+        });
+        thread.start();
     }
 
-    public void printThreads() {
-        ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
-        int threadNum = currentGroup.activeCount();
-        Thread[] threads = new Thread[threadNum];
-        currentGroup.enumerate(threads);
-        for (int i = 0; i < threadNum; i++)
-            System.out.println("线程号：" + i + " = " + threads[i].getName());
+    public static void mode2_test() {
+        Thread thread = new Thread(() -> {
+            mode2();
+        });
+        thread.start();
     }
 
     public static void main(String[] args) throws Exception {
-        Test test = new Test();
-        Thread thread = Thread.currentThread();
-        System.out.println("[java]" + thread);
-        System.out.println("[java]python start");
-        test.hello1();
-        System.out.println("[java]python over");
-        Thread.sleep(3000);
+        init();
+        mode1_test();
+
+        Thread.sleep(1000);
         System.out.println("[java]java over");
     }
 }

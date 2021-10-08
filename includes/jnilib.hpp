@@ -9,9 +9,10 @@ extern "C" {
 PyMODINIT_FUNC PyInit_jnilib(void);
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void *reserved);
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved);
-JNIEXPORT void JNICALL Java_Test_init(JNIEnv*, jobject);
-JNIEXPORT void JNICALL Java_Test_hello1(JNIEnv*, jobject);
-JNIEXPORT void JNICALL Java_Test_hello2(JNIEnv*, jobject);
+JNIEXPORT void JNICALL Java_Test_init(JNIEnv*, jclass);
+JNIEXPORT void JNICALL Java_Test_fini(JNIEnv*, jclass);
+JNIEXPORT void JNICALL Java_Test_mode1(JNIEnv*, jclass, jstring fname);
+JNIEXPORT void JNICALL Java_Test_mode2(JNIEnv*, jclass);
 
 }
 

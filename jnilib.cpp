@@ -65,19 +65,29 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void *reserved) {
     Py_Finalize();
 }
 
-JNIEXPORT void JNICALL Java_Test_init(JNIEnv*, jobject) {
+JNIEXPORT void JNICALL Java_Test_init(JNIEnv*, jclass) {
     PyImport_AppendInittab("_jnilib", PyInit__jnilib);
     Py_Initialize();
-}
-
-
-JNIEXPORT void JNICALL Java_Test_hello1(JNIEnv*, jobject) {
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('.')");
-    PyRun_SimpleString("import java_util");
 }
 
-JNIEXPORT void JNICALL Java_Test_hello2(JNIEnv*, jobject) {
-    PyRun_SimpleString("import importlib");
-    PyRun_SimpleString("importlib.reload(java_util)");
+JNIEXPORT void JNICALL Java_Test_fini(JNIEnv*, jclass) {
+    Py_Finalize();
+}
+
+
+JNIEXPORT void JNICALL Java_Test_mode1(JNIEnv *env, jclass, jstring j_fname) {
+    PyThreadState *state = Py_NewInterpreter();
+    const char *fname = env->GetStringUTFChars(j_fname, NULL);
+    PyObject *py_fname = PyUnicode_FromString(fname);
+    FILE *fp = _Py_fopen_obj(py_fname, "rb");
+    PyRun_SimpleFileEx(fp, fname, 1);
+    Py_DECREF(py_fname);
+    Py_EndInterpreter(state);
+}
+
+JNIEXPORT void JNICALL Java_Test_mode2(JNIEnv*, jclass) {
+    int res = PyRun_InteractiveLoop(stdin, "<stdin>");
+    printf("[c]loop res: %d\n", res);
 }
