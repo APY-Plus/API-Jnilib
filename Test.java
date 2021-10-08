@@ -28,6 +28,6 @@ public class Test {
         mode1_test();
 
         Thread.sleep(1000);
-        System.out.println("[java]java over");
+        System.out.println("[java]main thread over");
     }
 }
